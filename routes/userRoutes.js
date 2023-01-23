@@ -43,7 +43,7 @@ router.post("/signup", async (req, res) => {
 
     console.log(createdUser);
     return res.status(201).json({
-      message: `welcome ${createdUser.name}`,
+      userCreated: `welcome ${createdUser.name}`,
     });
   } catch (error) {
     console.log("made to catch");
@@ -86,10 +86,10 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.get('logout', async (req, res)=>{
+router.get('/logout', async (req, res)=>{
   try {
     res.clearCookie('t')
-    return res.status(200).json({message: "cookie deleted logout"})
+    return res.status(200).json({Logout: "cookie deleted logout"})
   } catch (error) {
     res.status(500).send(error)
   }
