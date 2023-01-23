@@ -59,7 +59,7 @@ router.put("/:id", isAuthenticated, async (req, res) => {
     return res.status(500).json({ err: error });
   }
 });
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isAuthenticated, async (req, res) => {
   try {
     const exitingTodo = await Meals.findOne({
       where: { id: req.params.id },
