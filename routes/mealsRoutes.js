@@ -1,8 +1,9 @@
 const express = require("express");
+const { isAuthenticated } = require("../middlewares/auth");
 const router = express.Router();
 const Meals = require("../models/mealsModels");
 
-router.get("/", async (req, res) => {
+router.get("/", isAuthenticated, async (req, res) => {
   try {
     const meals = await Meals.findAll();
     res.status(200).send(meals);
@@ -11,7 +12,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", isAuthenticated, async (req, res) => {
   try {
     const { meal, time, calories } = req.body;
 
@@ -35,28 +36,27 @@ router.post("/create", async (req, res) => {
     res.status(500).send(error);
   }
 });
-router.put("/:id", async (req, res) => {
-    try {
-      const { meal } =
-        req.body;
-  
-      const exitingTodo = await Meals.findOne({
-        where: { id: req.params.id },
-      });
-  
-      if (!exitingTodo) {
-        return res.status(404).send("Meals doesn't exits in database");
-      }
-  
-      if (exitingTodo) {
-        const updatedTodo = await exitingTodo.update({
-         meal
-        });
-        await updatedTodo.save();
-        return res.status(200).send(updatedTodo);
-      }
-    } catch (error) {
-      return res.status(500).json({ err: error });
+router.put("/:id", isAuthenticated, async (req, res) => {
+  try {
+    const { meal } = req.body;
+
+    const exitingTodo = await Meals.findOne({
+      where: { id: req.params.id },
+    });
+
+    if (!exitingTodo) {
+      return res.status(404).send("Meals doesn't exits in database");
     }
-  });
+
+    if (exitingTodo) {
+      const updatedTodo = await exitingTodo.update({
+        meal,
+      });
+      await updatedTodo.save();
+      return res.status(200).send(updatedTodo);
+    }
+  } catch (error) {
+    return res.status(500).json({ err: error });
+  }
+});
 module.exports = router;

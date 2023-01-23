@@ -11,6 +11,8 @@ const {
   validateName,
 } = require("../utlis/validators");
 
+
+
 router.post("/signup", async (req, res) => {
   try {
     console.log("made to try");
